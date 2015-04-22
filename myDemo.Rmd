@@ -1,22 +1,94 @@
 ---
-title: "demo"
+title: "RStudio"
 author: "James Ware"
-date: "25 March 2015"
-output: html_document
+date: "22 April 2015"
+output: ioslides_presentation
+#output: pdf_document
+#output: word_document
 ---
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+##Topics
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+- knitr / rmarkdown for reproducible documents
+- version control (git/svn)
+- R packages
+
+RStudio makes these easy(er)
+
+## R Markdown
+
+This presentation is produced from an R Markdown document.  
+Markdown is a simple formatting syntax for authoring documents.  It is designed to be simple & legible in plain text editors, but can be rendered as HTML, PDF or MS Word.  
+For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+R-flavored markdown also lets you embed and evaluate code:
+
+## Data
 
 ```{r}
-summary(cars)
+# define new data
+LV_EF <- c(rnorm(19,40,2),5)
+LV_EDD <- rnorm(20,55,5)
+head(LV_EF)
+head(LV_EDD)
 ```
 
-You can also embed plots, for example:
+```{r, include=FALSE}
+outlierComment <- "Now let's deal with that outlier"
+```
+
+
+```{r,include=FALSE,eval=FALSE}
+#Sample 20 was a catastrophe: remove it:
+LV_EF <- LV_EF[-20]
+LV_EDD <- LV_EDD[-20]
+outlierComment <- "Outlier gone"
+```
+
+we analysed `r length(LV_EF)` samples
+
+## You can also embed plots
 
 ```{r, echo=FALSE}
-plot(cars)
+boxplot(LV_EF,main="LVEF",horizontal=T)
 ```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+You can control whether the R code is displayed: here it is suppressed, and only output shown.
+
+## LVEF does not correlate with LV EDD
+
+```{r, echo=FALSE}
+plot(LV_EF,LV_EDD)
+```
+
+`r outlierComment`
+
+## LVEF does not correlate with LV EDD
+Other output formats
+
+## Version control: RStudio has native support for Git / GitHub & Subversion.
+Brief demo:
+
+- commit / push / pull
+- checkout a repo
+
+## R packages provide self-contained container to distribute code and/or data
+There is a standard layout of directories
+- /R
+- DESCRIPTION
+- NAMESPACE
+- .Rproj (needed to get full benefits of RStudio, e.g. github, autosaving)
+- (/data)
+
+I use package-like directory tree for all R projects (even if not packages)
+
+http://r-pkgs.had.co.nz
+
+## RStudio for package developers
+lots of handy shortcuts for building & checking packages  
+library(devtools)
+
+## Reproducible science
+R markdown for project reports & presentations, and even manuscripts
+Git for version control & collaboration
+Packages for distribution (or Git repos)
