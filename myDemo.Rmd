@@ -1,10 +1,13 @@
 ---
-title: "RStudio"
+title: "Reproducible science in R: handy tools"
+#subtitle: "RStudio, Rmarkdown, git, packages"
 author: "James Ware"
 date: "22 April 2015"
+
 output: ioslides_presentation
 #output: pdf_document
 #output: word_document
+#output: beamer_presentation
 ---
 
 ##Topics
@@ -21,14 +24,14 @@ This presentation is produced from an R Markdown document.
 Markdown is a simple formatting syntax for authoring documents.  It is designed to be simple & legible in plain text editors, but can be rendered as HTML, PDF or MS Word.  
 For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
 
-R-flavored markdown also lets you embed and evaluate code:
+R flavored markdown also lets you embed and evaluate code:
 
 ## Data
 
 ```{r}
 # define new data
-LV_EF <- c(rnorm(19,40,2),5)
-LV_EDD <- rnorm(20,55,5)
+LV_EF <- signif(c(rnorm(19,40,2),5),3)
+LV_EDD <- signif(rnorm(20,55,5),3)
 head(LV_EF)
 head(LV_EDD)
 ```
@@ -40,12 +43,13 @@ outlierComment <- "Now let's deal with that outlier"
 
 ```{r,include=FALSE}
 #Sample 20 was a catastrophe: remove it:
-LV_EF <- LV_EF[-20]
-LV_EDD <- LV_EDD[-20]
-outlierComment <- "Outlier gone"
+# LV_EF <- LV_EF[-20]
+# LV_EDD <- LV_EDD[-20]
+# outlierComment <- "Outlier gone"
 ```
 
-we analysed `r length(LV_EF)` samples
+**Text for a manuscript**  
+We analysed `r length(LV_EF)` samples. Mean LV EF was `r signif(mean(LV_EF),3)`.
 
 ## You can also embed plots
 
@@ -55,25 +59,42 @@ boxplot(LV_EF,main="LVEF",horizontal=T)
 
 You can control whether the R code is displayed: here it is suppressed, and only output shown.
 
+## A table
+
+```{r, echo=FALSE, warnings=F,results='asis'}
+knitr::kable(head(data.frame(LV_EF,LV_EDD)))
+```
+
+
 ## LVEF does not correlate with LV EDD
 
 ```{r, echo=FALSE}
 plot(LV_EF,LV_EDD)
+abline(lm(LV_EDD ~ LV_EF),col="red")
 ```
 
 `r outlierComment`
 
-## LVEF does not correlate with LV EDD
-Other output formats
+## R markdown
+Demonstrate other output formats
+
+- html document, ioslides
+- pdf document, beamer slides
+- word docx
+
+all can be customized with appropriate templates etc
 
 ## Version control: RStudio has native support for Git / GitHub & Subversion.
 Brief demo:
 
 - commit / push / pull
 - checkout a repo
+    + git@github.com:jamesware/denovolyzerManuscript.git
+    + manuscriptDemo
 
-## R packages provide self-contained container to distribute code and/or data
-There is a standard layout of directories
+## R packages: a container to distribute code and/or data
+Standard directory layout:
+
 - /R
 - DESCRIPTION
 - NAMESPACE
@@ -86,9 +107,14 @@ http://r-pkgs.had.co.nz
 
 ## RStudio for package developers
 lots of handy shortcuts for building & checking packages  
-library(devtools)
+devtools
+roxygen
+
+(look at denovolyzeR for example if time)
 
 ## Reproducible science
-R markdown for project reports & presentations, and even manuscripts
-Git for version control & collaboration
-Packages for distribution (or Git repos)
+
+- R markdown for project reports & presentations, and even manuscripts  
+- Git for version control & collaboration  
+    + https://github.com/macarthur-lab/exac_papers
+- Packages for distribution (or Git repos)  
