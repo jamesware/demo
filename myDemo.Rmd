@@ -38,7 +38,7 @@ outlierComment <- "Now let's deal with that outlier"
 ```
 
 
-```{r,include=FALSE,eval=FALSE}
+```{r,include=FALSE}
 #Sample 20 was a catastrophe: remove it:
 LV_EF <- LV_EF[-20]
 LV_EDD <- LV_EDD[-20]
